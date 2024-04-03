@@ -131,6 +131,7 @@ def buildArgParser():
     parser.add_argument("--nla-redirection-host", help="Redirection target ip if NLA is enforced", default=None)
     parser.add_argument("--nla-redirection-port", help="Redirection target port if NLA is enforced", type=int, default=None)
     parser.add_argument("--ssp-challenge", help="Set challenge for SSP authentictation (e.g. 1122334455667788). Incompatible with --auth ssp.", type=str, default=None)
+    parser.add_argument("--priority-drive", help="Set the drive to prioritize during enumeration.", type=str, default=None)
 
     return parser
 
@@ -213,6 +214,7 @@ def configure(cmdline=None) -> MITMConfig:
     config.redirectionHost = args.nla_redirection_host
     config.redirectionPort = args.nla_redirection_port
     config.sspChallenge = args.ssp_challenge
+    config.priorityDrive = args.priority_drive
 
     payload = None
     powershell = None

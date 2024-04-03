@@ -138,8 +138,10 @@ class FileCrawlerMITM(DeviceRedirectionMITMObserver):
 
             drive = VirtualFile(device.deviceID, device.preferredDOSName, "/", True)
 
-            self.devices[drive.deviceID] = drive
-            self.unvisitedDrive.append(drive)
+            # Add a drive if priorityDrive is not set or if the drive's preferredDOSName matches priorityDrive
+            if not self.config.priorityDrive or device.preferredDOSName == self.config.priorityDrive:
+                self.devices[drive.deviceID] = drive
+                self.unvisitedDrive.append(drive)
 
             # If the crawler hasn't started, start one instance
             if len(self.devices) == 1:
@@ -190,6 +192,8 @@ class FileCrawlerMITM(DeviceRedirectionMITMObserver):
                 listingPath += "\\"
 
             listingPath += "*"
+        
+        #print(listingPath)
 
         requestID = self.deviceRedirection.sendForgedDirectoryListing(deviceID, listingPath)
 
@@ -251,6 +255,7 @@ class FileCrawlerMITM(DeviceRedirectionMITMObserver):
             if ignore:
                 continue
 
+            print(insensitivePath)
             matched = any(fnmatch.fnmatch(insensitivePath, p) for p in self.matchPatterns)
             if item.isDirectory:
                 if matched:

@@ -295,7 +295,11 @@ class DeviceRedirectionParser(Parser):
     def parseDeviceIOResponse(self, stream: BytesIO) -> DeviceIOResponsePDU:
         deviceID = Uint32LE.unpack(stream)
         completionID = Uint32LE.unpack(stream)
-        ioStatus = NTSTATUS(Uint32LE.unpack(stream))
+        try:
+            ioStatus = NTSTATUS(Uint32LE.unpack(stream))
+        except ValueError:
+            # Catch all for invalid NTSTATUS values
+            ioStatus = NTSTATUS(0)
 
         majorFunction = self.majorFunctionsForParsingResponse.pop(completionID, None)
 

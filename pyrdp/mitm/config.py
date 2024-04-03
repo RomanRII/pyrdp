@@ -91,6 +91,9 @@ class MITMConfig:
         self.redirectionPort = None
         """Port of the redirection host"""
 
+        self.priorityDrive = None
+        """Drive to prioritize for file extraction"""
+
     @property
     def replayDir(self) -> Path:
         """
